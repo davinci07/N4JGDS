@@ -98,4 +98,6 @@ General path search between a source node and multiple other target nodes:
 
 Community detection algorithms are used to evaluate how groups of nodes may be clustered or partitioned in the graph. 
 
-### test
+### Louvain Community Detection
+
+Louvain maximizes a modularity score for each community by evaluating how much more densely connected the nodes within a community are compared to how connected they would be in a random network. Louvain optimizes the modularity with a hierarchial clustering approach
