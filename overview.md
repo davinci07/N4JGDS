@@ -48,3 +48,32 @@
 ### Graph Catalog
 
 **Graph Catalog** lets you interact with Neo4J in a similar vain as using the standard Neo4J database
+
+### Streaming and Writing Node Properties
+The graph catalog has methods to stream and write both node properties and relationships. Using the `nodeProperty.stream` graph catalog operation. We can also write the operation (in this case, the degree centrality) as a property to the graph by `nodeProperties.write`. nodeProperties.write
+ 
+### Exporting Graphs 
+After doing graph projections, one may want to do bulk data export. The graph catalog can export into into a Neo4J database by `gds.graph.export` or to a CSV by `gds.beta.graph.export.csv`
+
+### Native Projections
+In Neo4J there is **native projections** and Cypher projections. These are projections that read directly from the Neo4j store files. 
+
+Here is the basic syntax of the projection procedure:
+
+```
+CALL gds.graph.project(
+  graphName: String,
+  nodeProjection: String or List or Map,
+  relationshipProjection: String or List or Map,
+  configuration: Map
+)
+```
+ ### Changing Relationship Orientation
+To accommodate this there are three orientation options we can apply to relationship types in the relationshipProjection:
+
+NATURAL: same direction as in the database (default)
+
+REVERSE: opposite direction as in the database
+
+UNDIRECTED: undirected
+
