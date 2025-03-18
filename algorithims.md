@@ -139,3 +139,14 @@ Generally its best between 2^7 and 2^10 (e.g. 2^8 for 100K nodes).
 
 ---
 ## Similarity
+
+### Similarity Algos in GDS
+
+N4JGDS has two primary similarity algorithms:
+
+    - **Node Similarity**: Determines similiarity between nodes based on the relative proportion of shared neighboring nodes. Either Jaccard or Overlap similarity. 
+    - **KNN K-Nearest Neighbor**: Determines similarity based off node properties.
+
+List of integers are subject to Jaccard and Overlap, list of floating point numbers to Cosine Similarity, Pearson, and Euclidean. Node Similarity has a degreeCutOff parameter for nodes which allows you to set a lower limit on the degree centrality for nodes to be selected.KNN has various parameters that can be tuned to affect the speed vs completeness trade-off of node comparisons, including sampling rate, initial sampler methodology, random join counts between iteration, and a few others. Both Node Similarity and KNN have a topK parameter to limit the number similarity comparisons returned per node.
+
+Usually you would do Projection -> Embeddings -> Similarity
