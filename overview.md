@@ -77,3 +77,30 @@ REVERSE: opposite direction as in the database
 
 UNDIRECTED: undirected
 
+--- 
+### Cypherm Projections
+
+Cypher projection, as its name implies, uses Cypher to define the projection pattern and enables more flexibility.
+
+Example:
+```
+MATCH (sourceNode:Node)-[r:RELATIONSHIP]->(targetNode:Node)
+WITH gds.graph.project(
+    graphName: String,
+    sourceNode: Node or Integer,
+    targetNode: Node or Integer,
+    dataConfig: Map,
+    configuration: Map
+) AS g
+RETURN g
+```
+
+Cypher projection takes two mandatory arguments: graphName and sourceNode (but also a targetNode iws often used too).
+
+
+### Flexibility of Cypher Projections
+In the above example, there were two things that prevented us from directly using a native projection. They also happen to be two of the most common cases for using Cypher Projections.
+
+Complex Filtering: Using node and/or relationship property conditions or other more complex MATCH/WHERE conditions to filter the graph, rather than just node label and relationship types.
+
+Aggregating Multi-Hop Paths with Weights: The relationship projection required aggregating the (Actor)-[ACTED_IN]-(Movie)-[ACTED_IN]-(Actor) pattern to a (Actor)-[ACTED_WITH {actedWithCount}]-(Actor) pattern where the actedWithCount is a relationship weight property. This type of projection, where we need to transform multi-hop paths into an aggregated relationship that connects the source and target node, is a commonly occurring pattern in graph analytics.
