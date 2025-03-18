@@ -101,3 +101,52 @@ Community detection algorithms are used to evaluate how groups of nodes may be c
 ### Louvain Community Detection
 
 Louvain maximizes a modularity score for each community by evaluating how much more densely connected the nodes within a community are compared to how connected they would be in a random network. Louvain optimizes the modularity with a hierarchial clustering approach.
+
+Louvain is also a stochastic algorithm, meaning that it can have very random outcomes without a defined `seedProperty` or defined structure. Additionally, the Weakly Connected Components (WCC), take a more deterministic partitioning approach to contain better consistency.
+
+
+**Other Community Detection Algorithms**
+- Label Propagation: Similar intent as Louvain. Fast algorithm that parallelizes well. Great for large graphs.
+
+- Weakly Connected Components (WCC): Partitions the graph into sets of connected nodes such that
+    - Every node is reachable from any other node in the same set
+    - No path exists between nodes from different sets
+
+- Triangle Count: Counts the number of triangles for each node. Can be used to detect the cohesiveness of communities and stability of the graph.
+
+- Local Clustering Coefficient: Computes the local clustering coefficient for each node in the graph which is an indicator for how the node clusters with its neighbors.
+
+---
+
+## Node Embeddings
+
+Similar to finding similarity between node properties of nodes, node embeddings compute low-dimensional vector representations of nodes such that similarity between vectors.
+
+Think of node embeddings as taking a graph database and mapping them to a lower dimensional space so then they can be represented as vectors. Once they are vectors, they can be used for cluster analysis. They are not meant to create insight themselves but used for enable or scaling other analytics. 
+Some possibilities are:
+- Exploratory Data Analysis
+- Similiarity Measurements
+- Machine Learning Training
+
+### FastRP
+
+**FastRP** stands for Fast Random Projection which levarages probablistic samplistic techniques to generate sparse representations which allow for faster calculation of embedding vectors in similiar quality as traditional random walks and NN techniques liek **Node2Vec** and **GraphSage**. 
+
+There are two that are worth noting consideration:
+- `embeddingDimension`: Controls the length of embedding vectors which is a tradeoff between dimensionality reduction and accuracy. Bigger dimensions = more accuracy, but takes longer to generate and produce embedding vectors.
+Generally its best between 2^7 and 2^10 (e.g. 2^8 for 100K nodes). 
+- `IterationWeights`: Controls the number of iterations for intermediate embeddings and their relative impact on the final node embedding. The parameter is a list of numbers, indicating one iteration per number where the number is the weight applied to that iteration. the default is [0.0, 1.0, 1.0].
+
+---
+## Similarity
+
+### Similarity Algos in GDS
+
+N4JGDS has two primary similarity algorithms:
+
+    - **Node Similarity**: Determines similiarity between nodes based on the relative proportion of shared neighboring nodes. Either Jaccard or Overlap similarity. 
+    - **KNN K-Nearest Neighbor**: Determines similarity based off node properties.
+
+List of integers are subject to Jaccard and Overlap, list of floating point numbers to Cosine Similarity, Pearson, and Euclidean. Node Similarity has a degreeCutOff parameter for nodes which allows you to set a lower limit on the degree centrality for nodes to be selected.KNN has various parameters that can be tuned to affect the speed vs completeness trade-off of node comparisons, including sampling rate, initial sampler methodology, random join counts between iteration, and a few others. Both Node Similarity and KNN have a topK parameter to limit the number similarity comparisons returned per node.
+
+Usually you would do Projection -> Embeddings -> Similarity
